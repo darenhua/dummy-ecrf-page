@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hematology Lab Form</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+
+            .form-container {
+                background-color: white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            h1 {
+                color: #333;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .section {
+                margin-bottom: 30px;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #fafafa;
+            }
+
+            .section h2 {
+                margin-top: 0;
+                color: #555;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 10px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                display: inline-block;
+                width: 200px;
+                font-weight: bold;
+                vertical-align: top;
+                margin-right: 10px;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="time"],
+            select,
+            textarea {
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            input[type="text"],
+            textarea {
+                width: 300px;
+            }
+
+            select {
+                width: 200px;
+            }
+
+            input[type="radio"],
+            input[type="checkbox"] {
+                margin-right: 5px;
+            }
+
+            .radio-group {
+                display: inline-block;
+                margin-right: 20px;
+            }
+
+            .test-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+            }
+
+            .test-table th,
+            .test-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .test-table th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+
+            .test-row {
+                background-color: white;
+            }
+
+            .test-row:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+            .value-input {
+                width: 80px;
+                padding: 4px;
+            }
+
+            .unit-options {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+            }
+
+            .clinical-options {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+            }
+
+            .submit-button {
+                color: black;
+                padding: 12px 30px;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                margin-top: 20px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .submit-button:hover {
+                opacity: 0.8;
+            }
+
+            .required {
+                color: red;
+            }
+
+            .error {
+                color: red;
+                font-size: 12px;
+                margin-top: 5px;
+            }
+
+            .test-number {
+                font-weight: bold;
+                width: 30px;
+                text-align: center;
+            }
+
+            .test-name {
+                width: 200px;
+            }
+
+            .test-value {
+                width: 100px;
+            }
+
+            .test-units {
+                width: 150px;
+            }
+
+            .test-clinical {
+                width: 180px;
+            }
+
+            .test-checkbox {
+                width: 80px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="form-container">
+            <h1>Labs - Hematology</h1>
+
+            <form id="hematologyForm" onsubmit="return validateForm(event)">
+                <div class="section">
+                    <h2>Hematology</h2>
+
+                    <div class="form-group">
+                        <label for="protocol"
+                            >Were lab samples collected as per Protocol?
+                            <span class="required">*</span></label
+                        >
+                        <div class="radio-group">
+                            <input
+                                type="radio"
+                                id="protocol_yes"
+                                name="protocol"
+                                value="yes"
+                                required
+                            />
+                            <label for="protocol_yes">Yes</label>
+                        </div>
+                        <div class="radio-group">
+                            <input
+                                type="radio"
+                                id="protocol_no"
+                                name="protocol"
+                                value="no"
+                                required
+                            />
+                            <label for="protocol_no">No</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specify"
+                            >If no, specify
+                            <span class="required">*</span></label
+                        >
+                        <input
+                            type="text"
+                            id="specify"
+                            name="specify"
+                            placeholder="Please specify if protocol not followed"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="collection_date"
+                            >Collection date
+                            <span class="required">*</span></label
+                        >
+                        <input
+                            type="date"
+                            id="collection_date"
+                            name="collection_date"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="collection_time"
+                            >Collection time
+                            <span class="required">*</span></label
+                        >
+                        <input
+                            type="time"
+                            id="collection_time"
+                            name="collection_time"
+                            required
+                        />
+                    </div>
+
+                    <table class="test-table">
+                        <thead>
+                            <tr>
+                                <th>Row</th>
+                                <th>Tools</th>
+                                <th>Test</th>
+                                <th>Value</th>
+                                <th>Unit</th>
+                                <th>Clinical Evaluation</th>
+                                <th>Not done</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="test-row">
+                                <td class="test-number">1</td>
+                                <td>⚙️</td>
+                                <td class="test-name">
+                                    <select name="test1" required>
+                                        <option value="">Select test</option>
+                                        <option value="wbc_count">
+                                            WBC Count
+                                        </option>
+                                        <option value="rbc_count">
+                                            RBC Count
+                                        </option>
+                                        <option value="hemoglobin">
+                                            Hemoglobin
+                                        </option>
+                                        <option value="hematocrit">
+                                            Hematocrit
+                                        </option>
+                                        <option value="platelet_count">
+                                            Platelet Count
+                                        </option>
+                                    </select>
+                                </td>
+                                <td class="test-value">
+                                    <input
+                                        type="text"
+                                        name="value1"
+                                        class="value-input"
+                                        required
+                                    />
+                                </td>
+                                <td class="test-units">
+                                    <div class="unit-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="k/ul"
+                                                required
+                                            />
+                                            K/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="10^3/ul"
+                                                required
+                                            />
+                                            10^3/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="mm3"
+                                                required
+                                            />
+                                            mm3</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="g/dl"
+                                                required
+                                            />
+                                            g/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="percent"
+                                                required
+                                            />
+                                            %</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="gm/dl"
+                                                required
+                                            />
+                                            gm/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="k/cu_mm"
+                                                required
+                                            />
+                                            K/CU mm</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="k/l"
+                                                required
+                                            />
+                                            k/L</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit1"
+                                                value="g/l"
+                                                required
+                                            />
+                                            g/L</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-clinical">
+                                    <div class="clinical-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical1"
+                                                value="normal"
+                                                required
+                                            />
+                                            Normal</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical1"
+                                                value="abnormal_ncs"
+                                                required
+                                            />
+                                            Abnormal, NCS</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical1"
+                                                value="abnormal_cs"
+                                                required
+                                            />
+                                            Abnormal, CS</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="not_done1"
+                                        value="1"
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr class="test-row">
+                                <td class="test-number">2</td>
+                                <td>⚙️</td>
+                                <td class="test-name">
+                                    <select name="test2" required>
+                                        <option value="">Select test</option>
+                                        <option value="hemoglobin">
+                                            Hemoglobin
+                                        </option>
+                                        <option value="hematocrit">
+                                            Hematocrit
+                                        </option>
+                                        <option value="mcv">MCV</option>
+                                        <option value="mch">MCH</option>
+                                        <option value="mchc">MCHC</option>
+                                    </select>
+                                </td>
+                                <td class="test-value">
+                                    <input
+                                        type="text"
+                                        name="value2"
+                                        class="value-input"
+                                        required
+                                    />
+                                </td>
+                                <td class="test-units">
+                                    <div class="unit-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="k/ul"
+                                                required
+                                            />
+                                            K/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="10^3/ul"
+                                                required
+                                            />
+                                            10^3/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="mm3"
+                                                required
+                                            />
+                                            mm3</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="g/dl"
+                                                required
+                                            />
+                                            g/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="percent"
+                                                required
+                                            />
+                                            %</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="gm/dl"
+                                                required
+                                            />
+                                            gm/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="k/cu_mm"
+                                                required
+                                            />
+                                            K/CU mm</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="k/l"
+                                                required
+                                            />
+                                            k/L</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit2"
+                                                value="g/l"
+                                                required
+                                            />
+                                            g/L</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-clinical">
+                                    <div class="clinical-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical2"
+                                                value="normal"
+                                                required
+                                            />
+                                            Normal</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical2"
+                                                value="abnormal_ncs"
+                                                required
+                                            />
+                                            Abnormal, NCS</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical2"
+                                                value="abnormal_cs"
+                                                required
+                                            />
+                                            Abnormal, CS</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="not_done2"
+                                        value="1"
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr class="test-row">
+                                <td class="test-number">3</td>
+                                <td>⚙️</td>
+                                <td class="test-name">
+                                    <select name="test3" required>
+                                        <option value="">Select test</option>
+                                        <option value="platelet_count">
+                                            Platelet Count
+                                        </option>
+                                        <option value="mpv">MPV</option>
+                                        <option value="pdw">PDW</option>
+                                        <option value="pct">PCT</option>
+                                    </select>
+                                </td>
+                                <td class="test-value">
+                                    <input
+                                        type="text"
+                                        name="value3"
+                                        class="value-input"
+                                        required
+                                    />
+                                </td>
+                                <td class="test-units">
+                                    <div class="unit-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="k/ul"
+                                                required
+                                            />
+                                            K/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="10^3/ul"
+                                                required
+                                            />
+                                            10^3/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="mm3"
+                                                required
+                                            />
+                                            mm3</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="g/dl"
+                                                required
+                                            />
+                                            g/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="percent"
+                                                required
+                                            />
+                                            %</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="gm/dl"
+                                                required
+                                            />
+                                            gm/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="k/cu_mm"
+                                                required
+                                            />
+                                            K/CU mm</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="k/l"
+                                                required
+                                            />
+                                            k/L</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit3"
+                                                value="g/l"
+                                                required
+                                            />
+                                            g/L</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-clinical">
+                                    <div class="clinical-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical3"
+                                                value="normal"
+                                                required
+                                            />
+                                            Normal</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical3"
+                                                value="abnormal_ncs"
+                                                required
+                                            />
+                                            Abnormal, NCS</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical3"
+                                                value="abnormal_cs"
+                                                required
+                                            />
+                                            Abnormal, CS</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="not_done3"
+                                        value="1"
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr class="test-row">
+                                <td class="test-number">4</td>
+                                <td>⚙️</td>
+                                <td class="test-name">
+                                    <select name="test4" required>
+                                        <option value="">Select test</option>
+                                        <option
+                                            value="absolute_neutrophil_count"
+                                        >
+                                            Absolute neutrophil count
+                                        </option>
+                                        <option value="neutrophil_percent">
+                                            Neutrophil %
+                                        </option>
+                                        <option value="lymphocyte_count">
+                                            Lymphocyte count
+                                        </option>
+                                        <option value="monocyte_count">
+                                            Monocyte count
+                                        </option>
+                                    </select>
+                                </td>
+                                <td class="test-value">
+                                    <input
+                                        type="text"
+                                        name="value4"
+                                        class="value-input"
+                                        required
+                                    />
+                                </td>
+                                <td class="test-units">
+                                    <div class="unit-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="k/ul"
+                                                required
+                                            />
+                                            K/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="10^3/ul"
+                                                required
+                                            />
+                                            10^3/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="mm3"
+                                                required
+                                            />
+                                            mm3</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="g/dl"
+                                                required
+                                            />
+                                            g/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="percent"
+                                                required
+                                            />
+                                            %</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="gm/dl"
+                                                required
+                                            />
+                                            gm/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="k/cu_mm"
+                                                required
+                                            />
+                                            K/CU mm</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="k/l"
+                                                required
+                                            />
+                                            k/L</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit4"
+                                                value="g/l"
+                                                required
+                                            />
+                                            g/L</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-clinical">
+                                    <div class="clinical-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical4"
+                                                value="normal"
+                                                required
+                                            />
+                                            Normal</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical4"
+                                                value="abnormal_ncs"
+                                                required
+                                            />
+                                            Abnormal, NCS</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical4"
+                                                value="abnormal_cs"
+                                                required
+                                            />
+                                            Abnormal, CS</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="not_done4"
+                                        value="1"
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr class="test-row">
+                                <td class="test-number">5</td>
+                                <td>⚙️</td>
+                                <td class="test-name">
+                                    <select name="test5" required>
+                                        <option value="">Select test</option>
+                                        <option value="absolute_lymphocytes">
+                                            Absolute lymphocytes
+                                        </option>
+                                        <option value="lymphocyte_percent">
+                                            Lymphocyte %
+                                        </option>
+                                        <option value="eosinophil_count">
+                                            Eosinophil count
+                                        </option>
+                                        <option value="basophil_count">
+                                            Basophil count
+                                        </option>
+                                    </select>
+                                </td>
+                                <td class="test-value">
+                                    <input
+                                        type="text"
+                                        name="value5"
+                                        class="value-input"
+                                        required
+                                    />
+                                </td>
+                                <td class="test-units">
+                                    <div class="unit-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="k/ul"
+                                                required
+                                            />
+                                            K/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="10^3/ul"
+                                                required
+                                            />
+                                            10^3/uL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="mm3"
+                                                required
+                                            />
+                                            mm3</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="g/dl"
+                                                required
+                                            />
+                                            g/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="percent"
+                                                required
+                                            />
+                                            %</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="gm/dl"
+                                                required
+                                            />
+                                            gm/dL</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="k/cu_mm"
+                                                required
+                                            />
+                                            K/CU mm</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="k/l"
+                                                required
+                                            />
+                                            k/L</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="unit5"
+                                                value="g/l"
+                                                required
+                                            />
+                                            g/L</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-clinical">
+                                    <div class="clinical-options">
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical5"
+                                                value="normal"
+                                                required
+                                            />
+                                            Normal</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical5"
+                                                value="abnormal_ncs"
+                                                required
+                                            />
+                                            Abnormal, NCS</label
+                                        >
+                                        <label
+                                            ><input
+                                                type="radio"
+                                                name="clinical5"
+                                                value="abnormal_cs"
+                                                required
+                                            />
+                                            Abnormal, CS</label
+                                        >
+                                    </div>
+                                </td>
+                                <td class="test-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="not_done5"
+                                        value="1"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    Submit Lab Results
+                </button>
+            </form>
+        </div>
+
+        <script>
+            function validateForm(event) {
+                event.preventDefault();
+
+                const form = document.getElementById("hematologyForm");
+                const formData = new FormData(form);
+                let isValid = true;
+                let errorMessages = [];
+
+                // Remove previous error messages
+                const errors = document.querySelectorAll(".error");
+                errors.forEach((error) => error.remove());
+
+                // Check if protocol is selected
+                const protocol = formData.get("protocol");
+                if (!protocol) {
+                    errorMessages.push("Protocol selection is required");
+                    isValid = false;
+                }
+
+                // If protocol is "no", specify field is required
+                if (protocol === "no") {
+                    const specify = formData.get("specify");
+                    if (!specify || specify.trim() === "") {
+                        errorMessages.push(
+                            "Specification is required when protocol is not followed",
+                        );
+                        isValid = false;
+                    }
+                }
+
+                // Check collection date and time
+                const collectionDate = formData.get("collection_date");
+                const collectionTime = formData.get("collection_time");
+
+                if (!collectionDate) {
+                    errorMessages.push("Collection date is required");
+                    isValid = false;
+                }
+
+                if (!collectionTime) {
+                    errorMessages.push("Collection time is required");
+                    isValid = false;
+                }
+
+                // Check each test row
+                for (let i = 1; i <= 5; i++) {
+                    const test = formData.get(`test${i}`);
+                    const value = formData.get(`value${i}`);
+                    const unit = formData.get(`unit${i}`);
+                    const clinical = formData.get(`clinical${i}`);
+                    const notDone = formData.get(`not_done${i}`);
+
+                    if (!notDone) {
+                        if (!test) {
+                            errorMessages.push(
+                                `Test ${i}: Test selection is required`,
+                            );
+                            isValid = false;
+                        }
+
+                        if (!value || value.trim() === "") {
+                            errorMessages.push(`Test ${i}: Value is required`);
+                            isValid = false;
+                        }
+
+                        if (!unit) {
+                            errorMessages.push(
+                                `Test ${i}: Unit selection is required`,
+                            );
+                            isValid = false;
+                        }
+
+                        if (!clinical) {
+                            errorMessages.push(
+                                `Test ${i}: Clinical evaluation is required`,
+                            );
+                            isValid = false;
+                        }
+                    }
+                }
+
+                if (!isValid) {
+                    alert(
+                        "Please correct the following errors:\n\n" +
+                            errorMessages.join("\n"),
+                    );
+                    return false;
+                }
+
+                // If validation passes, show success message
+                alert("Form submitted successfully!");
+                console.log("Form data:", Object.fromEntries(formData));
+
+                return true;
+            }
+
+            // Add event listeners to "Not done" checkboxes
+            document.addEventListener("DOMContentLoaded", function () {
+                for (let i = 1; i <= 5; i++) {
+                    const notDoneCheckbox = document.querySelector(
+                        `input[name="not_done${i}"]`,
+                    );
+                    const testRow = notDoneCheckbox.closest(".test-row");
+
+                    notDoneCheckbox.addEventListener("change", function () {
+                        const inputs = testRow.querySelectorAll(
+                            'select, input[type="text"], input[type="radio"]',
+                        );
+                        inputs.forEach((input) => {
+                            if (input.name !== `not_done${i}`) {
+                                input.disabled = this.checked;
+                                input.required = !this.checked;
+                            }
+                        });
+                    });
+                }
+
+                // Add event listener for protocol radio buttons
+                const protocolRadios = document.querySelectorAll(
+                    'input[name="protocol"]',
+                );
+                const specifyField = document.getElementById("specify");
+
+                protocolRadios.forEach((radio) => {
+                    radio.addEventListener("change", function () {
+                        if (this.value === "no") {
+                            specifyField.required = true;
+                            specifyField.style.backgroundColor = "#fff5f5";
+                        } else {
+                            specifyField.required = false;
+                            specifyField.style.backgroundColor = "";
+                            specifyField.value = "";
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
