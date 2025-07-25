@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vital Signs Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+    fieldset { margin-bottom: 1.5em; padding: 1em; }
+    legend { font-weight: bold; }
+    label { display: block; margin-top: .5em; }
+    .inline { display: inline-block; margin-right: 1em; }
+    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1em; align-items: center; }
+    .row label { display: block; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <h1>Vital Signs</h1>
+  <form id="vitalsForm" novalidate>
+    <!-- Visit selection -->
+    <fieldset>
+      <legend>Visit</legend>
+      <label for="visit">Visit:</label>
+      <select id="visit" name="visit" required>
+        <option value="">-- Select --</option>
+        <option>Screening</option>
+        <option>Baseline</option>
+        <option>Unscheduled</option>
+      </select>
+    </fieldset>
+
+    <!-- Were vital signs performed? -->
+    <fieldset>
+      <legend>Were vital signs performed?</legend>
+      <div class="inline">
+        <input type="radio" id="vs_yes" name="performed" value="yes" required>
+        <label for="vs_yes">Yes</label>
+      </div>
+      <div class="inline">
+        <input type="radio" id="vs_no" name="performed" value="no">
+        <label for="vs_no">No</label>
+      </div>
+      <div>
+        <label for="vs_reason">If no, specify:</label>
+        <textarea id="vs_reason" name="vs_reason" rows="2" disabled></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Vital signs collection date -->
+    <fieldset>
+      <legend>Vital signs collection date</legend>
+      <label for="collection_date">Date:</label>
+      <input type="date" id="collection_date" name="collection_date" required>
+    </fieldset>
+
+    <!-- Height (screening only) -->
+    <fieldset id="heightFieldset">
+      <legend>Height <small>(For Screening Visit Only)</small></legend>
+      <label for="height_value">Height:</label>
+      <input type="number" id="height_value" name="height_value" min="0" step="0.1" required>
+      <div class="inline">
+        <input type="radio" id="unit_cm" name="height_unit" value="cm" required>
+        <label for="unit_cm">cm</label>
+      </div>
+      <div class="inline">
+        <input type="radio" id="unit_in" name="height_unit" value="in">
+        <label for="unit_in">in</label>
+      </div>
+      <div class="inline">
+        <input type="checkbox" id="height_na" name="height_na">
+        <label for="height_na">Not Done</label>
+      </div>
+    </fieldset>
+
+    <!-- Vitals table (screening, baseline, unscheduled) -->
+    <fieldset>
+      <legend>Vitals <small>(For Screening, Baseline, Unscheduled Visits Only)</small></legend>
+      <div class="row">
+        <label for="sbp">Systolic BP (mmHg):</label>
+        <input type="number" id="sbp" name="sbp" min="0" required>
+        <label for="dbp">Diastolic BP (mmHg):</label>
+        <input type="number" id="dbp" name="dbp" min="0" required>
+        <div>
+          <input type="checkbox" id="bp_na" name="bp_na">
+          <label for="bp_na">BP Not Done</label>
+        </div>
+
+        <label for="weight">Weight:</label>
+        <input type="number" id="weight" name="weight" min="0" step="0.1" required>
+        <div class="inline">
+          <input type="radio" id="w_kg" name="weight_unit" value="kg" required>
+          <label for="w_kg">kg</label>
+        </div>
+        <div class="inline">
+          <input type="radio" id="w_lbs" name="weight_unit" value="lbs">
+          <label for="w_lbs">lbs</label>
+        </div>
+        <div>
+          <input type="checkbox" id="weight_na" name="weight_na">
+          <label for="weight_na">Weight Not Done</label>
+        </div>
+
+        <label for="hr">Heart Rate (bpm):</label>
+        <input type="number" id="hr" name="hr" min="0" required>
+        <div>
+          <input type="checkbox" id="hr_na" name="hr_na">
+          <label for="hr_na">HR Not Done</label>
+        </div>
+
+        <label for="rr">Respiration Rate (breaths/min):</label>
+        <input type="number" id="rr" name="rr" min="0" required>
+        <div>
+          <input type="checkbox" id="rr_na" name="rr_na">
+          <label for="rr_na">RR Not Done</label>
+        </div>
+
+        <label for="ox">Pulse Oximetry (%):</label>
+        <input type="number" id="ox" name="ox" min="0" max="100" required>
+        <div>
+          <input type="checkbox" id="ox_na" name="ox_na">
+          <label for="ox_na">Oximetry Not Done</label>
+        </div>
+
+        <label for="temp">Temperature:</label>
+        <input type="number" id="temp" name="temp" step="0.1" required>
+        <div class="inline">
+          <input type="radio" id="t_c" name="temp_unit" value="C" required>
+          <label for="t_c">°C</label>
+        </div>
+        <div class="inline">
+          <input type="radio" id="t_f" name="temp_unit" value="F">
+          <label for="t_f">°F</label>
+        </div>
+        <div>
+          <input type="checkbox" id="temp_na" name="temp_na">
+          <label for="temp_na">Temp Not Done</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('vitalsForm');
+    const vsNo = document.getElementById('vs_no');
+    const vsReason = document.getElementById('vs_reason');
+    const heightNA = document.getElementById('height_na');
+    const heightInputs = [ 'height_value', 'unit_cm', 'unit_in' ].map(id => document.getElementById(id));
+
+    // Toggle reason textarea if "No" selected
+    document.getElementsByName('performed').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (vsNo.checked) {
+          vsReason.disabled = false;
+          vsReason.required = true;
+        } else {
+          vsReason.disabled = true;
+          vsReason.required = false;
+          vsReason.value = '';
+        }
+      });
+    });
+
+    // If "Not Done" for height is checked, disable height inputs
+    heightNA.addEventListener('change', () => {
+      heightInputs.forEach(el => {
+        el.disabled = heightNA.checked;
+        if (heightNA.checked) {
+          el.required = false;
+          if (el.type === 'radio') el.checked = false;
+          else el.value = '';
+        } else {
+          // only re‑add requirement to the number and the radios
+          if (el.id === 'height_value' || el.name === 'height_unit') {
+            el.required = true;
+          }
+        }
+      });
+    });
+
+    // Final validation on submit
+    form.addEventListener('submit', (e) => {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        form.reportValidity();
+      }
+    });
+  </script>
+
+</body>
+</html>
